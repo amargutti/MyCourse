@@ -15,7 +15,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseStaticFiles();
+app.UseStaticFiles(); //Middleware per recuperare i file nella cartella wwwroot (es. immagini)
 
 app.UseRouting();
 
