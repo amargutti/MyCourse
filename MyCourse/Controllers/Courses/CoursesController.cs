@@ -10,7 +10,7 @@ namespace MyCourse.Controllers.Courses
         {
             CourseService courseService = new CourseService();
             List<CourseViewModel> courses = courseService.GetCourses();
-            return View();
+            return View(courses);
         }
 
         public IActionResult Detail(string id) {
