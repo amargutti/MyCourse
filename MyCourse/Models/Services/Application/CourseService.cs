@@ -5,8 +5,6 @@ namespace MyCourse.Models.Services.Application
 {
     public class CourseService
     {
-
-
         public List<CourseViewModel> GetCourses()
         {
             var rand = new Random();
