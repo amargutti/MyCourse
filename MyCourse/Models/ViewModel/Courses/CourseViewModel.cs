@@ -1,6 +1,6 @@
 ﻿using MyCourse.Models.ValueObjects;
 
-namespace MyCourse.Models.ViewModel
+namespace MyCourse.Models.ViewModel.Courses
 {
     public class CourseViewModel
     {

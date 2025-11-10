@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyCourse.Models.Services.Application;
-using MyCourse.Models.ViewModel;
+using MyCourse.Models.ViewModel.Courses;
 
 namespace MyCourse.Controllers.Courses
 {

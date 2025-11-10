@@ -1,5 +1,4 @@
-﻿
-using MyCourse.Models.ViewModel;
+﻿using MyCourse.Models.ViewModel.Courses;
 
 namespace MyCourse.Models.Services.Application
 {
