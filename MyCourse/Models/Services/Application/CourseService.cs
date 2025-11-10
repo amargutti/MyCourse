@@ -3,9 +3,9 @@ using MyCourse.Models.ViewModel.Lessons;
 
 namespace MyCourse.Models.Services.Application
 {
-    public class CourseService
+    public class CourseService : ICourseService
     {
-        public static CourseDetailViewModel GetCourse(string id)
+        public CourseDetailViewModel GetCourse(string id)
         {
             var rand = new Random();
             float rating()

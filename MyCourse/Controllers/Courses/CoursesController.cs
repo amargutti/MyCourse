@@ -6,6 +6,13 @@ namespace MyCourse.Controllers.Courses
 {
     public class CoursesController : Controller
     {
+        private readonly ICourseService courseService;
+
+        public CoursesController(ICourseService courseService)
+        {
+            this.courseService = courseService;
+        }
+
         public IActionResult Index()
         {
             ViewData["Title"] = "Catalogo Corsi";
@@ -17,7 +24,7 @@ namespace MyCourse.Controllers.Courses
         public IActionResult Detail(string id) {
             ViewData["Title"] = $"Corso {id}";
             CourseService courseService = new CourseService();
-            CourseDetailViewModel course = CourseService.GetCourse(id);
+            CourseDetailViewModel course = courseService.GetCourse(id);
             return View(course);
         }
     }
