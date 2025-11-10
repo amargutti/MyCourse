@@ -1,28 +1,29 @@
-﻿@* @model CourseDetailViewModel *@
+﻿@using MyCourse.Models.ViewModel.Lessons
+@model CourseDetailViewModel
 <section>
     <div class="row">
         <div class="col-md-9">
-            <h1>Dettaglio Corso</h1>
+            <h1>@ViewData["Title"]</h1>
         </div>
         <div class="col-md-3">
             <a href="#" class="btn btn-warning btn-lg btn-block">Iscriviti</a>
         </div>
     </div>
-    <div class="row">
+    <div class="row mt-3">
         <div class="col-md-9">
-            <p>Descrizione</p>
+            <p>@Model.Description</p>
         </div>
         <div class="col-md-3">
             <aside>
-                <author> Autore</author>
+                <author> @Model.Author</author>
                 <div>
-                   @*  @for (int i = 1; i <= 5; i++)
+                    @for (int i = 1; i <= 5; i++)
                     {
-                        if (course.Rating >= i)
+                        if (@Model.Rating >= i)
                         {
                             <i class="bi bi-star-fill text-warning"></i>
                         }
-                        else if (course.Rating > i - 1)
+                        else if (Model.Rating > i - 1)
                         {
                             <i class="bi bi-star-half text-warning"></i>
                         }
@@ -30,12 +31,12 @@
                         {
                             <i class="bi bi-star"></i>
                         }
-                    } *@
+                    }
                 </div>
-                <div>
-                    FUllPRice<br /> <s class="text-secondary">FullPrice</s>
+                <div class="mb-3">
+                    @Model.CurrentPrice<br /> <s class="text-secondary">@Model.FullPrice</s>
                 </div>
-                <img src="~/logo.svg" width="100"/>
+                <img src="@Model.ImagePath" width="100" />
             </aside>
         </div>
     </div>
@@ -44,22 +45,26 @@
 <section>
     <h2>Lezioni</h2>
     <hr>
-    <div class="row">
-        <div class="col-md-9 d-flex align-items-center">
-            <a href="#">Title</a>
-        </div>
-        <div class="col-md-3 d-flex align-items-center lesson-duration">
-            <i class="far fa-clock"></i><time>Duration</time>
-        </div>
-    </div>
-    }
-    <hr>
-    <div class="row course-duration">
-        <div class="col-md-9 d-flex align-items-center">
-            Totale
-        </div>
-        <div class="col-md-3 d-flex align-items-center">
-            <i class="far fa-clock"></i><time>TotalCourseDuration</time>
+    <div class="list-group">
+        @foreach (LessonViewModel lesson in Model.Lessons)
+        {
+            <div class="row list-group-item d-flex">
+                <div class="col-md-9 d-flex align-items-center">
+                    <a href="#">@lesson.Name</a>
+                </div>
+                <div class="col-md-3 d-flex align-items-center">
+                    <i class="bi bi-clock me-2"></i><time>@lesson.Duration.ToString("m'm 's's'")</time>
+                </div>
+            </div>
+        }
+        <hr>
+        <div class="row course-duration">
+            <div class="col-md-9 d-flex align-items-center">
+                <strong>Totale</strong>
+            </div>
+            <div class="col-md-3 d-flex align-items-center">
+                <i class="bi bi-clock me-2"></i><time>@Model.TotalCourseDuration.ToString("m'm 's's'")</time>
+            </div>
         </div>
     </div>
 </section>
