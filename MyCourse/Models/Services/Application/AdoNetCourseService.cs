@@ -24,10 +24,10 @@ namespace MyCourse.Models.Services.Application
             DataSet dataSet = await db.QueryAsync(query);
 
             DataTable courseTable = dataSet.Tables[0];
-            //if (courseTable.Rows.Count != 1)
-            //{
-            //    throw new InvalidOperationException($"Did not return exactly 1 row for Course {id}");
-            //}
+            if (courseTable.Rows.Count != 1)
+            {
+                throw new InvalidOperationException($"Did not return exactly 1 row for Course {id}");
+            }
 
             CourseDetailViewModel course = CourseDetailViewModel.FromDataRow(courseTable.Rows[0]);
 
