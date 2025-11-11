@@ -16,7 +16,7 @@ namespace MyCourse.Models.Services.Application
 
         public CourseDetailViewModel GetCourse(string id)
         {
-            string query = $"SELECT * FROM Courses WHERE Id={Convert.ToInt32(id)};" +
+            string query = $"SELECT Id, Title, ImagePath, Description, Author, Rating, CurrentPrice_Amount, CurrentPrice_Currency, FullPrice_Amount, FullPrice_Currency FROM Courses WHERE Id={Convert.ToInt32(id)};" +
                 $"SELECT * FROM Lessons WHERE CourseId={Convert.ToInt32(id)}";
 
 
@@ -42,7 +42,7 @@ namespace MyCourse.Models.Services.Application
 
         public List<CourseViewModel> GetCourses()
         {
-            string query = "SELECT * FROM Courses";
+            string query = "SELECT Id, Title, ImagePath, Author, Rating, CurrentPrice_Amount, CurrentPrice_Currency, FullPrice_Amount, FullPrice_Currency FROM Courses";
             DataSet dataSet = db.Query(query);
             DataTable dataTable = dataSet.Tables[0];
             var courseList = new List<CourseViewModel>();
