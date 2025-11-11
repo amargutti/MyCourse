@@ -13,16 +13,16 @@ namespace MyCourse.Controllers.Courses
             this.courseService = courseService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             ViewData["Title"] = "Catalogo Corsi";
-            List<CourseViewModel> courses = courseService.GetCourses();
+            List<CourseViewModel> courses = await courseService.GetCoursesAsync();
             return View(courses);
         }
 
-        public IActionResult Detail(string id) {
+        public async Task<IActionResult> Detail(string id) {
             ViewData["Title"] = $"Corso {id}";
-            CourseDetailViewModel course = courseService.GetCourse(id);
+            CourseDetailViewModel course = await courseService.GetCourseAsync(id);
             return View(course);
         }
     }

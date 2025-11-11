@@ -4,8 +4,8 @@ namespace MyCourse.Models.Services.Application
 {
     public interface ICourseService
     {
-        List<CourseViewModel> GetCourses();
+        Task<List<CourseViewModel>> GetCoursesAsync();
 
-        CourseDetailViewModel GetCourse(string id);
+        Task<CourseDetailViewModel> GetCourseAsync(string id);
     }
 }
