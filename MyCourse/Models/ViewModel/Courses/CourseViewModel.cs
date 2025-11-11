@@ -19,6 +19,7 @@ namespace MyCourse.Models.ViewModel.Courses
         {
             var courseViewModel = new CourseViewModel
             {
+                Id = (int)dataRow["Id"],
                 Title = (string)dataRow["Title"],
                 Author = (string)dataRow["Author"],
                 ImagePath = (string)dataRow["ImagePath"],

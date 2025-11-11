@@ -1,5 +1,8 @@
+using MyCourse.Models.Enums;
 using MyCourse.Models.ValueObjects;
+using MyCourse.Models.ViewModel.Courses;
 using MyCourse.Models.ViewModel.Lessons;
+using System.Data;
 
 public class CourseDetailViewModel
 {
@@ -7,15 +10,36 @@ public class CourseDetailViewModel
     public string Title { get; set; }
     public string Author { get; set; }
     public string ImagePath { get; set; }
-    public float Rating { get; set; }
+    public double Rating { get; set; }
     public Money FullPrice { get; set; }
     public Money CurrentPrice { get; set; }
     public string Description { get; set; }
     //TODO: Aggiungere Lezioni e durata totale corso
     public List<LessonViewModel> Lessons { get; set; } = new List<LessonViewModel>();
+    
 
-    public TimeSpan TotalCourseDuration
+    public static CourseDetailViewModel FromDataRow(DataRow dataRow)
     {
-        get => TimeSpan.FromSeconds(Lessons?.Sum(l => l.Duration.TotalSeconds) ?? 0);
+        var courseViewModel = new CourseDetailViewModel
+        {
+            Title = (string)dataRow["Title"],
+            Author = (string)dataRow["Author"],
+            ImagePath = (string)dataRow["ImagePath"],
+            Rating = (double)dataRow["Rating"],
+            Description = dataRow["Description"] != null ? (string)dataRow["Description"] : "",
+            FullPrice = new Money
+            {
+                Amount = Convert.ToDecimal(dataRow["FullPrice_Amount"]),
+                Currency = Enum.Parse<Currency>((string)dataRow["FullPrice_Currency"])
+            },
+            CurrentPrice = new Money
+            {
+                Amount = Convert.ToDecimal(dataRow["CurrentPrice_Amount"]),
+                Currency = Enum.Parse<Currency>((string)dataRow["CurrentPrice_Currency"])
+            },
+            Lessons = new List<LessonViewModel>()
+        };
+
+        return courseViewModel;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using MyCourse.Models.Services.Infrastructure;
 using MyCourse.Models.ViewModel.Courses;
+using MyCourse.Models.ViewModel.Lessons;
 using System.Data;
 
 namespace MyCourse.Models.Services.Application
@@ -15,7 +16,28 @@ namespace MyCourse.Models.Services.Application
 
         public CourseDetailViewModel GetCourse(string id)
         {
-            throw new NotImplementedException();
+            string query = $"SELECT * FROM Courses WHERE Id={Convert.ToInt32(id)};" +
+                $"SELECT * FROM Lessons WHERE CourseId={Convert.ToInt32(id)}";
+
+
+            DataSet dataSet = db.Query(query);
+
+            DataTable courseTable = dataSet.Tables[0];
+            //if (courseTable.Rows.Count != 1)
+            //{
+            //    throw new InvalidOperationException($"Did not return exactly 1 row for Course {id}");
+            //}
+            
+            CourseDetailViewModel course = CourseDetailViewModel.FromDataRow(courseTable.Rows[0]);
+
+            DataTable lessonTable = dataSet.Tables[1];
+
+            foreach (DataRow row in lessonTable.Rows) { 
+                LessonViewModel lessonViewModel = LessonViewModel.FromDataRow(row);
+                course.Lessons.Add(lessonViewModel);
+            }
+
+            return course;
         }
 
         public List<CourseViewModel> GetCourses()

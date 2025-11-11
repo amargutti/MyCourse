@@ -53,18 +53,9 @@
                     <a href="#">@lesson.Name</a>
                 </div>
                 <div class="col-md-3 d-flex align-items-center">
-                    <i class="bi bi-clock me-2"></i><time>@lesson.Duration.ToString("m'm 's's'")</time>
+                    <i class="bi bi-clock me-2"></i><time>@lesson.Duration</time>
                 </div>
             </div>
         }
-        <hr>
-        <div class="row course-duration">
-            <div class="col-md-9 d-flex align-items-center">
-                <strong>Totale</strong>
-            </div>
-            <div class="col-md-3 d-flex align-items-center">
-                <i class="bi bi-clock me-2"></i><time>@Model.TotalCourseDuration.ToString("m'm 's's'")</time>
-            </div>
-        </div>
     </div>
 </section>
