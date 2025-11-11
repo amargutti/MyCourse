@@ -16,14 +16,12 @@ namespace MyCourse.Controllers.Courses
         public IActionResult Index()
         {
             ViewData["Title"] = "Catalogo Corsi";
-            CourseService courseService = new CourseService();
             List<CourseViewModel> courses = courseService.GetCourses();
             return View(courses);
         }
 
         public IActionResult Detail(string id) {
             ViewData["Title"] = $"Corso {id}";
-            CourseService courseService = new CourseService();
             CourseDetailViewModel course = courseService.GetCourse(id);
             return View(course);
         }
