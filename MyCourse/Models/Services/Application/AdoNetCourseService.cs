@@ -22,7 +22,15 @@ namespace MyCourse.Models.Services.Application
         {
             string query = "SELECT * FROM Courses";
             DataSet dataSet = db.Query(query);
-            throw new NotImplementedException();
+            DataTable dataTable = dataSet.Tables[0];
+            var courseList = new List<CourseViewModel>();
+            foreach(DataRow dataRow in dataTable.Rows)
+            {
+                CourseViewModel courseViewModel = CourseViewModel.FromDataRow(dataRow);
+                courseList.Add(courseViewModel);
+            }
+
+            return courseList;
         }
     }
 }

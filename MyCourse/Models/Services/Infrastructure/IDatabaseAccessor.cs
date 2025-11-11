@@ -4,6 +4,6 @@ namespace MyCourse.Models.Services.Infrastructure
 {
     public interface IDatabaseAccessor
     {
-        DataSet Query();
+        DataSet Query(string query);
     }
 }
