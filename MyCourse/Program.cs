@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<ICourseService, AdoNetCourseService>();
+builder.Services.AddTransient<ICachedCourseService, MemoryCachedCourseService>();
 builder.Services.AddTransient<IDatabaseAccessor, SQLServerDatabaseAccessor>();
 builder.Services.AddTransient<ErrorService>();
 
