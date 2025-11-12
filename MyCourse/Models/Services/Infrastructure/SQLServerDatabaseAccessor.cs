@@ -16,7 +16,6 @@ namespace MyCourse.Models.Services.Infrastructure
             this.connectionStringOptions = connectionStringOptions;
         }
 
-
         public async Task<DataSet> QueryAsync(FormattableString formattableQuery)
         {
             //Creiamo dei SqliteParameter a partire dalla FormattableString

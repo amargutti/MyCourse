@@ -11,6 +11,7 @@ builder.Services.AddTransient<IDatabaseAccessor, SQLServerDatabaseAccessor>();
 
 
 builder.Services.Configure<ConnectionStringOptions>(builder.Configuration.GetSection("ConnectionStrings"));
+builder.Services.Configure<CoursesOptions>(builder.Configuration.GetSection("Courses"));
 
 var app = builder.Build();
 
