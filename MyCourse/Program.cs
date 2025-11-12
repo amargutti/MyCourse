@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<ICourseService, AdoNetCourseService>();
 builder.Services.AddTransient<IDatabaseAccessor, SQLServerDatabaseAccessor>();
+builder.Services.AddTransient<ErrorService>();
 
 
 builder.Services.Configure<ConnectionStringOptions>(builder.Configuration.GetSection("ConnectionStrings"));

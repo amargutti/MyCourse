@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using MyCourse.Models.Exceptions;
 using MyCourse.Models.Options;
 using MyCourse.Models.Services.Infrastructure;
 using MyCourse.Models.ViewModel.Courses;
@@ -34,7 +35,7 @@ namespace MyCourse.Models.Services.Application
             if (courseTable.Rows.Count != 1)
             {
                 log.LogWarning("Course {id} not found!", id);
-                throw new InvalidOperationException($"Did not return exactly 1 row for Course {id}");
+                throw new CourseNotFoundException(id);
             }
 
             CourseDetailViewModel course = CourseDetailViewModel.FromDataRow(courseTable.Rows[0]);
