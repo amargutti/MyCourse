@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
+using MyCourse.Models.Options;
 using MyCourse.Models.ViewModel.Courses;
 
 namespace MyCourse.Models.Services.Application
@@ -7,7 +9,6 @@ namespace MyCourse.Models.Services.Application
     {
         private readonly ICourseService courseService;
         private readonly IMemoryCache memoryCache;
-
         public MemoryCachedCourseService(ICourseService courseService, IMemoryCache memoryCache)
         {
             this.courseService = courseService;
@@ -16,9 +17,10 @@ namespace MyCourse.Models.Services.Application
 
         public Task<CourseDetailViewModel> GetCourseAsync(string id)
         {
+
             return memoryCache.GetOrCreateAsync($"Course{id}", cacheEntry =>
             {
-                cacheEntry.SetAbsoluteExpiration(TimeSpan.FromSeconds(60));
+                cacheEntry.SetAbsoluteExpiration(TimeSpan.FromSeconds(Convert.ToDouble(60)));
                 return courseService.GetCourseAsync(id);
             });
         }
