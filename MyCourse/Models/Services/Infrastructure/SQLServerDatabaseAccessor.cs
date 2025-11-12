@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MyCourse.Models.Enums;
 using MyCourse.Models.Options;
@@ -10,10 +11,12 @@ namespace MyCourse.Models.Services.Infrastructure
     public class SQLServerDatabaseAccessor : IDatabaseAccessor
     {
         private readonly IOptionsMonitor<ConnectionStringOptions> connectionStringOptions;
+        private readonly ILogger<SQLServerDatabaseAccessor> logger;
 
-        public SQLServerDatabaseAccessor(IOptionsMonitor<ConnectionStringOptions> connectionStringOptions)
+        public SQLServerDatabaseAccessor(IOptionsMonitor<ConnectionStringOptions> connectionStringOptions, ILogger<SQLServerDatabaseAccessor> logger)
         {
             this.connectionStringOptions = connectionStringOptions;
+            this.logger = logger;
         }
 
         public async Task<DataSet> QueryAsync(FormattableString formattableQuery)
@@ -28,6 +31,8 @@ namespace MyCourse.Models.Services.Infrastructure
             }
             string query = formattableQuery.ToString();
             string connectionString = connectionStringOptions.CurrentValue.Default;
+
+            logger.LogInformation(query);
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {

@@ -12,11 +12,13 @@ namespace MyCourse.Models.Services.Application
     {
         private readonly IDatabaseAccessor db;
         private readonly IOptionsMonitor<CoursesOptions> coursesOptions;
+        private readonly ILogger<AdoNetCourseService> log;
 
-        public AdoNetCourseService(IDatabaseAccessor db, IOptionsMonitor<CoursesOptions> coursesOptions)
+        public AdoNetCourseService(IDatabaseAccessor db, IOptionsMonitor<CoursesOptions> coursesOptions, ILogger<AdoNetCourseService> log)
         {
             this.db = db;
             this.coursesOptions = coursesOptions;
+            this.log = log;
         }
 
         public async Task<CourseDetailViewModel> GetCourseAsync(string id)
@@ -24,12 +26,14 @@ namespace MyCourse.Models.Services.Application
             FormattableString query = @$"SELECT Id, Title, ImagePath, Description, Author, Rating, CurrentPrice_Amount, CurrentPrice_Currency, FullPrice_Amount, FullPrice_Currency FROM Courses WHERE Id={Convert.ToInt32(id)};
                 SELECT * FROM Lessons WHERE CourseId={Convert.ToInt32(id)}";
 
+            log.LogInformation("Query formed correctyl");
 
             DataSet dataSet = await db.QueryAsync(query);
 
             DataTable courseTable = dataSet.Tables[0];
             if (courseTable.Rows.Count != 1)
             {
+                log.LogWarning("Course {id} not found!", id);
                 throw new InvalidOperationException($"Did not return exactly 1 row for Course {id}");
             }
 
