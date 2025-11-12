@@ -1,3 +1,4 @@
+using MyCourse.Models.Options;
 using MyCourse.Models.Services.Application;
 using MyCourse.Models.Services.Infrastructure;
 
@@ -7,6 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<ICourseService, AdoNetCourseService>();
 builder.Services.AddTransient<IDatabaseAccessor, SQLServerDatabaseAccessor>();
+
+
+builder.Services.Configure<ConnectionStringOptions>(builder.Configuration.GetSection("ConnectionStrings"));
 
 var app = builder.Build();
 

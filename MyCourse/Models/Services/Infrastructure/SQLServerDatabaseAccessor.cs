@@ -1,5 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Options;
 using MyCourse.Models.Enums;
+using MyCourse.Models.Options;
 using MyCourse.Models.ValueObjects;
 using System.Data;
 
@@ -7,6 +9,14 @@ namespace MyCourse.Models.Services.Infrastructure
 {
     public class SQLServerDatabaseAccessor : IDatabaseAccessor
     {
+        private readonly IOptionsMonitor<ConnectionStringOptions> connectionStringOptions;
+
+        public SQLServerDatabaseAccessor(IOptionsMonitor<ConnectionStringOptions> connectionStringOptions)
+        {
+            this.connectionStringOptions = connectionStringOptions;
+        }
+
+
         public async Task<DataSet> QueryAsync(FormattableString formattableQuery)
         {
             //Creiamo dei SqliteParameter a partire dalla FormattableString
@@ -18,8 +28,9 @@ namespace MyCourse.Models.Services.Infrastructure
                 sqliteParameters.Add(parameter);
             }
             string query = formattableQuery.ToString();
+            string connectionString = connectionStringOptions.CurrentValue.Default;
 
-            using (SqlConnection conn = new SqlConnection("Server=(localdb)\\MyLocalDB;Database=MyCourse;Trusted_Connection=True;"))
+            using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 await conn.OpenAsync();
                 using (var comm = new SqlCommand(query, conn))
