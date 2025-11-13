@@ -20,7 +20,7 @@ namespace MyCourse.Controllers
             Exception exc = feature.Error;
 
             string errorPage =  errorService.getErrorPage(exc);
-            
+            ViewData["Title"] = errorPage;
             return View(errorPage);
         }
     }
