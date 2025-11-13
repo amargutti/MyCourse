@@ -24,9 +24,8 @@ namespace MyCourse.Models.Services.Application
 
             return memoryCache.GetOrCreateAsync($"Course{id}", cacheEntry =>
             {
-                var timer = options.CurrentValue.AbsoluteExpirationTimer;
                 cacheEntry.SetSize(1);
-                cacheEntry.SetAbsoluteExpiration(timer);
+                cacheEntry.SetAbsoluteExpiration(options.CurrentValue.AbsoluteExpirationTimer);
                 return courseService.GetCourseAsync(id);
             });
         }
@@ -35,9 +34,8 @@ namespace MyCourse.Models.Services.Application
         {
             return memoryCache.GetOrCreateAsync("Courses", cacheEntry =>
             {
-                var timer = options.CurrentValue.AbsoluteExpirationTimer;
                 cacheEntry.SetSize(2);
-                cacheEntry.SetAbsoluteExpiration(timer);
+                cacheEntry.SetAbsoluteExpiration(options.CurrentValue.AbsoluteExpirationTimer);
                 return courseService.GetCoursesAsync();
             });
         }
