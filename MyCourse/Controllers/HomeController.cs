@@ -13,6 +13,7 @@ namespace MyCourse.Controllers
             _logger = logger;
         }
 
+        [ResponseCache(CacheProfileName = "Home")]
         public IActionResult Index()
         {
             return View();

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using MyCourse.Models.Options;
 using MyCourse.Models.Services.Application;
@@ -12,6 +13,16 @@ builder.Services.AddTransient<ICachedCourseService, MemoryCachedCourseService>()
 builder.Services.AddTransient<IDatabaseAccessor, SQLServerDatabaseAccessor>();
 builder.Services.AddTransient<ErrorService>();
 
+builder.Services.AddResponseCaching();
+builder.Services.AddControllers(options =>
+{
+    options.CacheProfiles.Add("Home",
+        new CacheProfile
+        {
+            Duration = 60,
+            Location = ResponseCacheLocation.Client
+        });
+});
 
 builder.Services.Configure<ConnectionStringOptions>(builder.Configuration.GetSection("ConnectionStrings"));
 builder.Services.Configure<CoursesOptions>(builder.Configuration.GetSection("Courses"));
@@ -31,6 +42,8 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseStaticFiles(); //Middleware per recuperare i file nella cartella wwwroot (es. immagini)
+
+app.UseResponseCaching();
 
 app.UseRouting();
 
