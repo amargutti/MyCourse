@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Caching.Memory;
 using MyCourse.Models.Options;
 using MyCourse.Models.Services.Application;
 using MyCourse.Models.Services.Infrastructure;
@@ -14,6 +15,8 @@ builder.Services.AddTransient<ErrorService>();
 
 builder.Services.Configure<ConnectionStringOptions>(builder.Configuration.GetSection("ConnectionStrings"));
 builder.Services.Configure<CoursesOptions>(builder.Configuration.GetSection("Courses"));
+builder.Services.Configure<MemoryCacheOptions>(builder.Configuration.GetSection("MemoryCache"));
+builder.Services.Configure<CacheTimerOptions>(builder.Configuration.GetSection("MemoryCache"));
 
 var app = builder.Build();
 

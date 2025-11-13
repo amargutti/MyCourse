@@ -9,18 +9,24 @@ namespace MyCourse.Models.Services.Application
     {
         private readonly ICourseService courseService;
         private readonly IMemoryCache memoryCache;
-        public MemoryCachedCourseService(ICourseService courseService, IMemoryCache memoryCache)
+        private readonly IOptionsMonitor<CacheTimerOptions> options;
+
+        public MemoryCachedCourseService(ICourseService courseService, IMemoryCache memoryCache, IOptionsMonitor<CacheTimerOptions> options)
         {
             this.courseService = courseService;
             this.memoryCache = memoryCache;
+            this.options = options;
         }
 
         public Task<CourseDetailViewModel> GetCourseAsync(string id)
         {
+            //TODO: ricordati di rimuovere gli elementi dalla cache quando verrà implementata la edit
 
             return memoryCache.GetOrCreateAsync($"Course{id}", cacheEntry =>
             {
-                cacheEntry.SetAbsoluteExpiration(TimeSpan.FromSeconds(Convert.ToDouble(60)));
+                var timer = options.CurrentValue.AbsoluteExpirationTimer;
+                cacheEntry.SetSize(1);
+                cacheEntry.SetAbsoluteExpiration(timer);
                 return courseService.GetCourseAsync(id);
             });
         }
@@ -29,7 +35,9 @@ namespace MyCourse.Models.Services.Application
         {
             return memoryCache.GetOrCreateAsync("Courses", cacheEntry =>
             {
-                cacheEntry.SetAbsoluteExpiration(TimeSpan.FromSeconds(60));
+                var timer = options.CurrentValue.AbsoluteExpirationTimer;
+                cacheEntry.SetSize(2);
+                cacheEntry.SetAbsoluteExpiration(timer);
                 return courseService.GetCoursesAsync();
             });
         }
