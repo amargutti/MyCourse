@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using MyCourse.Models.Exceptions;
+using MyCourse.Models.InputModels;
 using MyCourse.Models.Options;
 using MyCourse.Models.Services.Infrastructure;
 using MyCourse.Models.ViewModel.Courses;
@@ -51,26 +52,12 @@ namespace MyCourse.Models.Services.Application
             return course;
         }
 
-        public async Task<List<CourseViewModel>> GetCoursesAsync(string search, int page, string orderby, bool ascending)
+        public async Task<List<CourseViewModel>> GetCoursesAsync(CourseListInputModel model)
         {
-            page = Math.Max(1, page);
-            int limit = coursesOptions.CurrentValue.PerPage;
-            int offset = (page - 1) * 10;
-            var orderOptions = coursesOptions.CurrentValue.Order;
-            
-            if(!orderOptions.Allow.Contains(orderby))
-            {
-                orderby = orderOptions.By;
-                ascending = orderOptions.Ascending;
-            }
-            if(orderby == "CurrentPrice")
-            {
-                orderby = "CurrentPrice_Amount";
-            }
+            string orderby = model.OrderBy == "CurrentPrice" ? "CurrentPrice_Amount" : model.OrderBy;
+            string direction = model.Ascending ? "ASC" : "DESC";
 
-            string direction = ascending ? "ASC" : "DESC";
-
-            FormattableString query = $"SELECT Id, Title, ImagePath, Author, Rating, CurrentPrice_Amount, CurrentPrice_Currency, FullPrice_Amount, FullPrice_Currency FROM Courses WHERE Title LIKE '%{search}%' ORDER BY {orderby} {direction} OFFSET {offset} ROWS FETCH NEXT {limit} ROWS ONLY";
+            FormattableString query = $"SELECT Id, Title, ImagePath, Author, Rating, CurrentPrice_Amount, CurrentPrice_Currency, FullPrice_Amount, FullPrice_Currency FROM Courses WHERE Title LIKE '%{model.Search}%' ORDER BY {orderby} {direction} OFFSET {model.Offset} ROWS FETCH NEXT {model.Limit} ROWS ONLY";
             DataSet dataSet = await db.QueryAsync(query);
             DataTable dataTable = dataSet.Tables[0];
             var courseList = new List<CourseViewModel>();
