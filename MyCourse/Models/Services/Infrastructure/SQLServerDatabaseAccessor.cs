@@ -26,6 +26,10 @@ namespace MyCourse.Models.Services.Infrastructure
             var sqliteParameters = new List<SqlParameter>();
             for (var i = 0; i < queryArguments.Length; i++)
             {
+                if (queryArguments[i] is Sql)
+                {
+                    continue;
+                }
                 var parameter = new SqlParameter(i.ToString(), queryArguments[i]);
                 sqliteParameters.Add(parameter);
             }

@@ -13,10 +13,17 @@
             </div>
         </form>
     </div>
-
 </div>
 
-<section class="list-group my-3">
+<div class="row mt-3">
+    <div class="col-md-1"></div>
+    <div class="col-md-5"><a class="nav-link" asp-route-orderby="Title" asp-route-ascending="true">Titolo</a></div>
+    <div class="col-md-2"><a class="nav-link" asp-route-orderby="Rating" asp-route-ascending="true">Valutazione</a></div>
+    <div class="col-md-2"><a class="nav-link" asp-route-orderby="CurrentPrice" asp-route-ascending="true">Prezzo</a></div>
+    <div class="col-md-2"></div>
+</div>
+
+<section class="list-group mt-1 mb-3">
     @foreach (var course in Model)
     {
         <div class="row align-items-center list-group-item d-flex">
