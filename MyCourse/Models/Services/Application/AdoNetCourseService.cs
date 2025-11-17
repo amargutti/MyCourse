@@ -52,12 +52,13 @@ namespace MyCourse.Models.Services.Application
             return course;
         }
 
-        public async Task<List<CourseViewModel>> GetCoursesAsync(CourseListInputModel model)
+        public async Task<ListViewModel<CourseViewModel>> GetCoursesAsync(CourseListInputModel model)
         {
             string orderby = model.OrderBy == "CurrentPrice" ? "CurrentPrice_Amount" : model.OrderBy;
             string direction = model.Ascending ? "ASC" : "DESC";
 
-            FormattableString query = $"SELECT Id, Title, ImagePath, Author, Rating, CurrentPrice_Amount, CurrentPrice_Currency, FullPrice_Amount, FullPrice_Currency FROM Courses WHERE Title LIKE '%{model.Search}%' ORDER BY {orderby} {direction} OFFSET {model.Offset} ROWS FETCH NEXT {model.Limit} ROWS ONLY";
+            FormattableString query = @$"SELECT Id, Title, ImagePath, Author, Rating, CurrentPrice_Amount, CurrentPrice_Currency, FullPrice_Amount, FullPrice_Currency FROM Courses WHERE Title LIKE '%{model.Search}%' ORDER BY {orderby} {direction} OFFSET {model.Offset} ROWS FETCH NEXT {model.Limit} ROWS ONLY; 
+                                        SELECT COUNT (*) FROM Courses WHERE Title LIKE '%{model.Search}%'";
             DataSet dataSet = await db.QueryAsync(query);
             DataTable dataTable = dataSet.Tables[0];
             var courseList = new List<CourseViewModel>();
@@ -67,7 +68,13 @@ namespace MyCourse.Models.Services.Application
                 courseList.Add(courseViewModel);
             }
 
-            return courseList;
+            ListViewModel<CourseViewModel> result = new ListViewModel<CourseViewModel>
+            {
+                Results = courseList,
+                TotalCount = Convert.ToInt32(dataSet.Tables[1].Rows[0][0])
+            }; 
+
+            return result;
         }
     }
 }
