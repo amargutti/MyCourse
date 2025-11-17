@@ -1,0 +1,19 @@
+﻿@model CourseViewModel
+<div class="row align-items-center list-group-item d-flex">
+    <div class="col-md-1">
+        <img src="@Model.ImagePath" width="70" />
+    </div>
+    <div class="col-md-5">
+        <h2>@Model.Title</h2>
+        <author class="text-secondary">di @Model.Author</author>
+    </div>
+    <div class="col-md-2" title="@Model.Rating">
+        <rating value="@Model.Rating"></rating>
+    </div>
+    <div class="col-md-2">
+        <price curren-price="@Model.CurrentPrice" full-price="@Model.FullPrice"></price>
+    </div>
+    <div class="col-md-2">
+        <a asp-action="Detail" asp-controller="Courses" asp-route-id="@Model.Id" class="btn btn-outline-primary">Dettaglio Corso @Model.Id</a>
+    </div>
+</div>

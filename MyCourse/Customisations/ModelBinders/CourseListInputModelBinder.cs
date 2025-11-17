@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 using MyCourse.Models.InputModels;
 using MyCourse.Models.Options;
 
-namespace MyCourse.ModelBinders
+namespace MyCourse.Customisations.ModelBinders
 {
     public class CourseListInputModelBinder : IModelBinder
     {

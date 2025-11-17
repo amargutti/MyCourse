@@ -16,24 +16,7 @@
 <section class="list-group mt-1 mb-3">
     @foreach (var course in Model.MostRecentCourses)
     {
-        <div class="row align-items-center list-group-item d-flex">
-            <div class="col-md-1">
-                <img src="@course.ImagePath" width="70" />
-            </div>
-            <div class="col-md-5">
-                <h2>@course.Title</h2>
-                <author class="text-secondary">di @course.Author</author>
-            </div>
-            <div class="col-md-2" title="@course.Rating">
-              <rating value="@course.Rating"></rating>
-            </div>
-            <div class="col-md-2">
-                <price curren-price="@course.CurrentPrice" full-price="@course.FullPrice"></price>
-            </div>
-            <div class="col-md-2">
-                <a asp-action="Detail" asp-controller="Courses" asp-route-id="@course.Id" class="btn btn-outline-primary">Dettaglio Corso @course.Id</a>
-            </div>
-        </div>
+        <partial name="_CourseLine" model="@course"></partial>
     }
 </section>
 
@@ -42,23 +25,6 @@
 <section class="list-group mt-1 mb-3">
     @foreach (var course in Model.BestRatingCourse)
     {
-        <div class="row align-items-center list-group-item d-flex">
-            <div class="col-md-1">
-                <img src="@course.ImagePath" width="70" />
-            </div>
-            <div class="col-md-5">
-                <h2>@course.Title</h2>
-                <author class="text-secondary">di @course.Author</author>
-            </div>
-            <div class="col-md-2" title="@course.Rating">
-                <rating value="@course.Rating"></rating>
-            </div>
-            <div class="col-md-2">
-                <price curren-price="@course.CurrentPrice" full-price="@course.FullPrice"></price>
-            </div>
-            <div class="col-md-2">
-                <a asp-action="Detail" asp-controller="Courses" asp-route-id="@course.Id" class="btn btn-outline-primary">Dettaglio Corso @course.Id</a>
-            </div>
-        </div>
+        <partial name="_CourseLine" model="@course"></partial>
     }
 </section>
