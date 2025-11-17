@@ -23,6 +23,29 @@ namespace MyCourse.Models.Services.Application
             this.log = log;
         }
 
+        public async Task<List<CourseViewModel>> GetBestRatingCourses()
+        {
+            CourseListInputModel inputModel = new CourseListInputModel(search: "", page: 1, orderby: "Rating", ascending: true, limit: 3, orderOptions: coursesOptions.CurrentValue.Order);
+            ListViewModel<CourseViewModel> result = await GetCoursesAsync(inputModel);
+            return result.Results;
+        }
+
+        public async Task<List<CourseViewModel>> GetMostRecentCourses()
+        {
+            CourseListInputModel inputModel = new CourseListInputModel
+                (
+                    search: "",
+                    page: 1,
+                    orderby: "Id",
+                    ascending: false,
+                    limit: 3,
+                    orderOptions: coursesOptions.CurrentValue.Order
+                );
+
+            ListViewModel<CourseViewModel> result = await GetCoursesAsync(inputModel);
+            return result.Results;
+        }
+
         public async Task<CourseDetailViewModel> GetCourseAsync(string id)
         {
             FormattableString query = @$"SELECT Id, Title, ImagePath, Description, Author, Rating, CurrentPrice_Amount, CurrentPrice_Currency, FullPrice_Amount, FullPrice_Currency FROM Courses WHERE Id={Convert.ToInt32(id)};
@@ -72,7 +95,7 @@ namespace MyCourse.Models.Services.Application
             {
                 Results = courseList,
                 TotalCount = Convert.ToInt32(dataSet.Tables[1].Rows[0][0])
-            }; 
+            };
 
             return result;
         }

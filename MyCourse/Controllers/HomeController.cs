@@ -1,6 +1,9 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using MyCourse.Models;
+using MyCourse.Models.Services.Application;
+using MyCourse.Models.ViewModel;
+using MyCourse.Models.ViewModel.Courses;
 
 namespace MyCourse.Controllers
 {
@@ -14,9 +17,18 @@ namespace MyCourse.Controllers
         }
 
         [ResponseCache(CacheProfileName = "Home")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index([FromServices] ICachedCourseService courseService)
         {
-            return View();
+            List<CourseViewModel> bestRatingCourses = await courseService.GetBestRatingCourses();
+            List<CourseViewModel> mostRecentCourses = await courseService.GetMostRecentCourses();
+
+            HomeViewModel model = new HomeViewModel
+            {
+                BestRatingCourse = bestRatingCourses,
+                MostRecentCourses = mostRecentCourses
+            };
+
+            return View(model);
         }
 
         public IActionResult Privacy()

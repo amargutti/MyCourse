@@ -8,5 +8,8 @@ namespace MyCourse.Models.Services.Application
         Task<ListViewModel<CourseViewModel>> GetCoursesAsync(CourseListInputModel model);
 
         Task<CourseDetailViewModel> GetCourseAsync(string id);
+
+        Task<List<CourseViewModel>> GetBestRatingCourses();
+        Task<List<CourseViewModel>> GetMostRecentCourses();
     }
 }

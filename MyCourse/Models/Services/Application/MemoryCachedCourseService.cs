@@ -19,6 +19,26 @@ namespace MyCourse.Models.Services.Application
             this.options = options;
         }
 
+        public Task<List<CourseViewModel>> GetBestRatingCourses ()
+        {
+            return memoryCache.GetOrCreateAsync("BestRatingCourses", cacheEntry =>
+            {
+                cacheEntry.SetSize(2);
+                cacheEntry.SetAbsoluteExpiration(options.CurrentValue.AbsoluteExpirationTimer);
+                return courseService.GetBestRatingCourses();
+            });
+        }
+
+        public Task<List<CourseViewModel>> GetMostRecentCourses()
+        {
+            return memoryCache.GetOrCreateAsync("MostRecentCourses", cacheEntry =>
+            {
+                cacheEntry.SetSize(2);
+                cacheEntry.SetAbsoluteExpiration(options.CurrentValue.AbsoluteExpirationTimer);
+                return courseService.GetMostRecentCourses();
+            });
+        }
+
         public Task<CourseDetailViewModel> GetCourseAsync(string id)
         {
             //TODO: ricordati di rimuovere gli elementi dalla cache quando verrà implementata la edit
