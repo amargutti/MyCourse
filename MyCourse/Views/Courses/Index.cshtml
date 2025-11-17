@@ -56,7 +56,7 @@
                <rating value="@course.Rating"></rating>
             </div>
             <div class="col-md-2">
-                @course.CurrentPrice <br /> <s class="text-secondary">@course.FullPrice</s>
+                <price curren-price="@course.CurrentPrice" full-price="@course.FullPrice"></price>
             </div>
             <div class="col-md-2">
                 <a asp-action="Detail" asp-controller="Courses" asp-route-id="@course.Id" class="btn btn-outline-primary">Dettaglio Corso @course.Id</a>

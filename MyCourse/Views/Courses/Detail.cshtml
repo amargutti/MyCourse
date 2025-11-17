@@ -20,7 +20,7 @@
                     <rating value="@Model.Rating"></rating>
                 </div>
                 <div class="mb-3">
-                    @Model.CurrentPrice<br /> <s class="text-secondary">@Model.FullPrice</s>
+                    <price curren-price="@Model.CurrentPrice" full-price="@Model.FullPrice"></price>
                 </div>
                 <img src="@Model.ImagePath" width="100" />
             </aside>
