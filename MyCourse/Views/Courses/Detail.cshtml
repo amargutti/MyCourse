@@ -17,21 +17,7 @@
             <aside>
                 <author> @Model.Author</author>
                 <div>
-                    @for (int i = 1; i <= 5; i++)
-                    {
-                        if (@Model.Rating >= i)
-                        {
-                            <i class="bi bi-star-fill text-warning"></i>
-                        }
-                        else if (Model.Rating > i - 1)
-                        {
-                            <i class="bi bi-star-half text-warning"></i>
-                        }
-                        else
-                        {
-                            <i class="bi bi-star"></i>
-                        }
-                    }
+                    <rating value="@Model.Rating"></rating>
                 </div>
                 <div class="mb-3">
                     @Model.CurrentPrice<br /> <s class="text-secondary">@Model.FullPrice</s>

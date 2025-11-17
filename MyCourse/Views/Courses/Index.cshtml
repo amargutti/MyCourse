@@ -53,21 +53,7 @@
                 <author class="text-secondary">di @course.Author</author>
             </div>
             <div class="col-md-2" title="@course.Rating">
-                @for (int i = 1; i <= 5; i++)
-                {
-                    if (course.Rating >= i)
-                    {
-                        <i class="bi bi-star-fill text-warning"></i>
-                    }
-                    else if (course.Rating > i - 1)
-                    {
-                        <i class="bi bi-star-half text-warning"></i>
-                    }
-                    else
-                    {
-                        <i class="bi bi-star"></i>
-                    }
-                }
+               <rating value="@course.Rating"></rating>
             </div>
             <div class="col-md-2">
                 @course.CurrentPrice <br /> <s class="text-secondary">@course.FullPrice</s>
