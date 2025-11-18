@@ -2,6 +2,7 @@
 using MyCourse.Models.InputModels;
 using MyCourse.Models.Services.Application;
 using MyCourse.Models.ViewModel.Courses;
+using System.Data;
 
 namespace MyCourse.Controllers.Courses
 {
@@ -31,6 +32,19 @@ namespace MyCourse.Controllers.Courses
             ViewData["Title"] = $"Corso {id}";
             CourseDetailViewModel course = await courseService.GetCourseAsync(id);
             return View(course);
+        }
+
+        public IActionResult Create()
+        {
+            ViewData["Title"] = "Nuovo Corso";
+            CourseCreateInputModel inputModel = new CourseCreateInputModel();
+            return View(inputModel);
+        }
+
+        [HttpPost]
+        public IActionResult Create(CourseCreateInputModel model)
+        {
+            return RedirectToAction(nameof(Index));
         }
     }
 }

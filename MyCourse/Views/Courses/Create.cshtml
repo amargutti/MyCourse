@@ -1,0 +1,15 @@
+﻿@model CourseCreateInputModel
+
+<h2>Crea Nuovo Corso</h2>
+<form method="post">
+    <section class="row">
+        <div class="col-md-8">
+            <input type="text" asp-for="Title" placeholder="Inserisci un titolo..." class="form-control form-control-lg" />
+        </div>
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-outline-primary btn-lg btn-block" asp-action="Create">
+                <i class="bi bi-rocket-takeoff me-2"></i>Crea Corso
+            </button>
+        </div>
+    </section>
+</form>
