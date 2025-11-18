@@ -22,7 +22,7 @@ namespace MyCourse.Models.ViewModel.Courses
                 Id = (int)dataRow["Id"],
                 Title = (string)dataRow["Title"],
                 Author = (string)dataRow["Author"],
-                ImagePath = (string)dataRow["ImagePath"],
+                ImagePath = dataRow["ImagePath"] != DBNull.Value ? (string)dataRow["ImagePath"] : "",
                 Rating = (double)dataRow["Rating"],
                 FullPrice = new Money
                 {

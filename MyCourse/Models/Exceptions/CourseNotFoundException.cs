@@ -6,7 +6,7 @@
         {
         }
 
-        public CourseNotFoundException(string courseId) : base($"Corso {courseId} not found!")
+        public CourseNotFoundException(int courseId) : base($"Corso {courseId} not found!")
         {
         }
     }

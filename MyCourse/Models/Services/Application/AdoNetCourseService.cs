@@ -46,7 +46,7 @@ namespace MyCourse.Models.Services.Application
             return result.Results;
         }
 
-        public async Task<CourseDetailViewModel> GetCourseAsync(string id)
+        public async Task<CourseDetailViewModel> GetCourseAsync(int id)
         {
             FormattableString query = @$"SELECT Id, Title, ImagePath, Description, Author, Rating, CurrentPrice_Amount, CurrentPrice_Currency, FullPrice_Amount, FullPrice_Currency FROM Courses WHERE Id={Convert.ToInt32(id)};
                 SELECT * FROM Lessons WHERE CourseId={Convert.ToInt32(id)}";
@@ -98,6 +98,24 @@ namespace MyCourse.Models.Services.Application
             };
 
             return result;
+        }
+
+        public async Task<CourseDetailViewModel> CreateCourseAsync(CourseCreateInputModel model)
+        {
+            string title = model.Title;
+            string author = "Mario Mariotti";
+
+            FormattableString query = @$"INSERT INTO Courses (Title, Author, Description, ImagePath, Rating, FullPrice_Amount, FullPrice_Currency, CurrentPrice_Amount, CurrentPrice_Currency)
+                                        VALUES ('{model.Title}', '{author}', '', '/logo.svg', 0, 0, 'EUR', 0, 'EUR');
+                                        SELECT TOP 1 * FROM Courses ORDER BY Id DESC;";
+
+            DataSet dataset = await db.QueryAsync(query);
+
+            int courseId = Convert.ToInt32(dataset.Tables[0].Rows[0][nameof(CourseDetailViewModel.Id)]);
+
+            CourseDetailViewModel course = await GetCourseAsync(courseId);
+
+            return course;
         }
     }
 }

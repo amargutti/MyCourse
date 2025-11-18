@@ -39,7 +39,7 @@ namespace MyCourse.Models.Services.Application
             });
         }
 
-        public Task<CourseDetailViewModel> GetCourseAsync(string id)
+        public Task<CourseDetailViewModel> GetCourseAsync(int id)
         {
             //TODO: ricordati di rimuovere gli elementi dalla cache quando verrà implementata la edit
 
@@ -72,6 +72,11 @@ namespace MyCourse.Models.Services.Application
 
             //Altrimenti uso il servizio applicativo sottostante, che recupererà sempre i valori dal database
             return courseService.GetCoursesAsync(model);
+        }
+
+        public Task<CourseDetailViewModel> CreateCourseAsync(CourseCreateInputModel model)
+        {
+            return courseService.CreateCourseAsync(model);
         }
     }
 }

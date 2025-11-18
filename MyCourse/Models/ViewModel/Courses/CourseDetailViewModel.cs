@@ -22,9 +22,10 @@ public class CourseDetailViewModel
     {
         var courseViewModel = new CourseDetailViewModel
         {
+            Id = (int)dataRow["Id"],
             Title = (string)dataRow["Title"],
             Author = (string)dataRow["Author"],
-            ImagePath = (string)dataRow["ImagePath"],
+            ImagePath = dataRow["ImagePath"] != DBNull.Value ? (string)dataRow["ImagePath"] : "",
             Rating = (double)dataRow["Rating"],
             Description = dataRow["Description"] != null ? (string)dataRow["Description"] : "",
             FullPrice = new Money

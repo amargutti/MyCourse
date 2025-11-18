@@ -7,9 +7,10 @@ namespace MyCourse.Models.Services.Application
     {
         Task<ListViewModel<CourseViewModel>> GetCoursesAsync(CourseListInputModel model);
 
-        Task<CourseDetailViewModel> GetCourseAsync(string id);
+        Task<CourseDetailViewModel> GetCourseAsync(int id);
 
         Task<List<CourseViewModel>> GetBestRatingCourses();
         Task<List<CourseViewModel>> GetMostRecentCourses();
+        Task<CourseDetailViewModel> CreateCourseAsync(CourseCreateInputModel model);
     }
 }

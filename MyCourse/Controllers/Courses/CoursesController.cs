@@ -28,7 +28,7 @@ namespace MyCourse.Controllers.Courses
             return View(viewModel);
         }
 
-        public async Task<IActionResult> Detail(string id) {
+        public async Task<IActionResult> Detail(int id) {
             ViewData["Title"] = $"Corso {id}";
             CourseDetailViewModel course = await courseService.GetCourseAsync(id);
             return View(course);
@@ -42,8 +42,9 @@ namespace MyCourse.Controllers.Courses
         }
 
         [HttpPost]
-        public IActionResult Create(CourseCreateInputModel model)
+        public async Task<IActionResult> Create(CourseCreateInputModel model)
         {
+            CourseDetailViewModel course = await courseService.CreateCourseAsync(model);
             return RedirectToAction(nameof(Index));
         }
     }
