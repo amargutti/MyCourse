@@ -78,5 +78,10 @@ namespace MyCourse.Models.Services.Application
         {
             return courseService.CreateCourseAsync(model);
         }
+
+        public Task<bool> IsTitleAvailable(string title)
+        {
+            return courseService.IsTitleAvailable(title);
+        }
     }
 }

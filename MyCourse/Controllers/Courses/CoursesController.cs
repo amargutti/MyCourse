@@ -60,6 +60,12 @@ namespace MyCourse.Controllers.Courses
                 ViewData["Title"] = "Nuovo Corso";
                 return View(model);
         }
+
+        public async Task<IActionResult> IsTitleAvailable(string title)
+        {
+            bool result = await courseService.IsTitleAvailable(title);
+            return Json(result);
+        }
     }
 }
  

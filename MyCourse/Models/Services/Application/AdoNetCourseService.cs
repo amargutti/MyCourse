@@ -125,5 +125,12 @@ namespace MyCourse.Models.Services.Application
                 throw new CourseTitleUnavailableException(title, ex);
             }
         }
+
+        public async Task<bool> IsTitleAvailable(string title)
+        {
+            DataSet result = await db.QueryAsync($"SELECT COUNT (*) FROM Courses WHERE Title = '{title}';");
+            bool titleAvailabe = Convert.ToInt32(result.Tables[0].Rows[0][0]) == 0;
+            return titleAvailabe;
+        }
     }
 }
