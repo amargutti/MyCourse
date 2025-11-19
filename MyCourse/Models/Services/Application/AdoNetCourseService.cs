@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Options;
 using MyCourse.Models.Exceptions;
 using MyCourse.Models.InputModels;
 using MyCourse.Models.Options;
@@ -105,17 +106,24 @@ namespace MyCourse.Models.Services.Application
             string title = model.Title;
             string author = "Mario Mariotti";
 
-            FormattableString query = @$"INSERT INTO Courses (Title, Author, Description, ImagePath, Rating, FullPrice_Amount, FullPrice_Currency, CurrentPrice_Amount, CurrentPrice_Currency)
+            try
+            {
+
+                FormattableString query = @$"INSERT INTO Courses (Title, Author, Description, ImagePath, Rating, FullPrice_Amount, FullPrice_Currency, CurrentPrice_Amount, CurrentPrice_Currency)
                                         VALUES ('{model.Title}', '{author}', '', '/logo.svg', 0, 0, 'EUR', 0, 'EUR');
                                         SELECT TOP 1 * FROM Courses ORDER BY Id DESC;";
 
-            DataSet dataset = await db.QueryAsync(query);
+                DataSet dataset = await db.QueryAsync(query);
 
-            int courseId = Convert.ToInt32(dataset.Tables[0].Rows[0][nameof(CourseDetailViewModel.Id)]);
+                int courseId = Convert.ToInt32(dataset.Tables[0].Rows[0][nameof(CourseDetailViewModel.Id)]);
 
-            CourseDetailViewModel course = await GetCourseAsync(courseId);
+                CourseDetailViewModel course = await GetCourseAsync(courseId);
 
-            return course;
+                return course;
+            } catch (SqlException ex) when (ex.Number == 2601)
+            {
+                throw new CourseTitleUnavailableException(title, ex);
+            }
         }
     }
 }

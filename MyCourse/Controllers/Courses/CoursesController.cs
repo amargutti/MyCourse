@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MyCourse.Models.Exceptions;
 using MyCourse.Models.InputModels;
 using MyCourse.Models.Services.Application;
 using MyCourse.Models.ViewModel.Courses;
@@ -44,14 +45,20 @@ namespace MyCourse.Controllers.Courses
         [HttpPost]
         public async Task<IActionResult> Create(CourseCreateInputModel model)
         {
-            if(!ModelState.IsValid)
+            if(ModelState.IsValid)
             {
+                try
+                {
+                    CourseDetailViewModel course = await courseService.CreateCourseAsync(model);
+                    return RedirectToAction(nameof(Index));
+
+                } catch (CourseTitleUnavailableException)
+                {
+                    ModelState.AddModelError(nameof(CourseDetailViewModel.Title), "Questo titolo esiste già");
+                }
+            }
                 ViewData["Title"] = "Nuovo Corso";
                 return View(model);
-            }
-
-            CourseDetailViewModel course = await courseService.CreateCourseAsync(model);
-            return RedirectToAction(nameof(Index));
         }
     }
 }
