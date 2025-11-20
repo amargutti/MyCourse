@@ -2,8 +2,9 @@
 @model CourseDetailViewModel
 <section>
     <div class="row">
-        <div class="col-md-9">
+        <div class="col-md-9 d-flex align-items-center gap-3">
             <h1>@Model.Title</h1>
+            <a asp-controller="Courses" asp-action="Edit" class="btn btn-outline-primary" asp-route-id="@Model.Id"><i class="bi bi-pencil"></i>Modifica</a>
         </div>
         <div class="col-md-3">
             <a href="#" class="btn btn-warning btn-lg btn-block">Iscriviti</a>
