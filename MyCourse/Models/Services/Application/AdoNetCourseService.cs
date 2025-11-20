@@ -132,5 +132,38 @@ namespace MyCourse.Models.Services.Application
             bool titleAvailabe = Convert.ToInt32(result.Tables[0].Rows[0][0]) == 0;
             return titleAvailabe;
         }
+
+        public async Task<CourseEditInputModel> GetCourseForEditAsync(int id)
+        {
+            FormattableString query = $"SELECT Id, Title, Description, ImagePath, Email, FullPrice_Amount, FullPrice_Currency, CurrentPrice_Amount, CurrentPrice_Currency FROM Courses WHERE Id = {id};";
+
+            DataSet dataSet = await db.QueryAsync(query);
+
+            DataTable table = dataSet.Tables[0];
+
+            if(table.Rows.Count < 1)
+            {
+                throw new CourseNotFoundException(id);
+            }
+
+            DataRow row = table.Rows[0];
+            CourseEditInputModel editInputModel = CourseEditInputModel.FromDataRow(row);
+
+            return editInputModel;
+        }
+
+        public async Task<CourseDetailViewModel> EditCourseAsync(CourseEditInputModel model)
+        {
+            try
+            {
+                DataSet dataSet = await db.QueryAsync($"UPDATE Courses SET Title={model.Title}, Description={model.Description}, Email={model.Email}, FullPrice_Amount{model.FullPrice.Amount}, FullPrice_Currency={model.FullPrice.Currency}, CurrentPrice_Amount={model.CurrentPrice.Amount}, CurrentPrice_Currency={model.CurrentPrice.Currency} WHERE Id={model.Id};");
+                CourseDetailViewModel course = await GetCourseAsync(model.Id);
+                return course;
+            }
+            catch (SqlException exc) when (exc.Number == 2601)
+            {
+                throw new CourseTitleUnavailableException(model.Title, exc);
+            }
+        }
     }
 }

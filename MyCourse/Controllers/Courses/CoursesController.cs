@@ -4,6 +4,7 @@ using MyCourse.Models.InputModels;
 using MyCourse.Models.Services.Application;
 using MyCourse.Models.ViewModel.Courses;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace MyCourse.Controllers.Courses
 {
@@ -65,6 +66,31 @@ namespace MyCourse.Controllers.Courses
         {
             bool result = await courseService.IsTitleAvailable(title);
             return Json(result);
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            ViewData["Title"] = "Modifica Corso";
+            CourseEditInputModel editModel = await courseService.GetCourseForEditAsync(id);
+            return View(editModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(CourseEditInputModel model)
+        {
+            if (ModelState.IsValid) {
+                try
+                {
+                    CourseDetailViewModel course = await courseService.EditCourseAsync(model);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (CourseTitleUnavailableException) {
+                    ModelState.AddModelError(nameof(CourseDetailViewModel.Title), "Questo titolo esiste già");
+                }
+            }
+
+            ViewData["Title"] = "Modifica Corso";
+            return View(model);
         }
     }
 }
