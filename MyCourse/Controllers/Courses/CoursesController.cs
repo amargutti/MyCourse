@@ -62,9 +62,9 @@ namespace MyCourse.Controllers.Courses
                 return View(model);
         }
 
-        public async Task<IActionResult> IsTitleAvailable(string title)
+        public async Task<IActionResult> IsTitleAvailable(string title, int id = 0)
         {
-            bool result = await courseService.IsTitleAvailable(title);
+            bool result = await courseService.IsTitleAvailable(title, id);
             return Json(result);
         }
 
@@ -82,7 +82,9 @@ namespace MyCourse.Controllers.Courses
                 try
                 {
                     CourseDetailViewModel course = await courseService.EditCourseAsync(model);
-                    return RedirectToAction(nameof(Index));
+                    TempData["ConfirmationMessage"] = $"Il corso {model.Title} è stato salvato con successo!";
+                    TempData["CacheListMessage"] = "Nella pagina 'Catalogo Corsi' dovrai aspettare qualche minuto per vedere le modifiche!!!";
+                    return RedirectToAction(nameof(Detail), new { id = model.Id });
                 }
                 catch (CourseTitleUnavailableException) {
                     ModelState.AddModelError(nameof(CourseDetailViewModel.Title), "Questo titolo esiste già");

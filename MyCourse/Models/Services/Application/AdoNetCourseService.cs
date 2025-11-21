@@ -126,9 +126,9 @@ namespace MyCourse.Models.Services.Application
             }
         }
 
-        public async Task<bool> IsTitleAvailable(string title)
+        public async Task<bool> IsTitleAvailable(string title, int id)
         {
-            DataSet result = await db.QueryAsync($"SELECT COUNT (*) FROM Courses WHERE Title LIKE '{title}';");
+            DataSet result = await db.QueryAsync($"SELECT COUNT (*) FROM Courses WHERE Title LIKE '{title}' AND Id<>{id};");
             bool titleAvailabe = Convert.ToInt32(result.Tables[0].Rows[0][0]) == 0;
             return titleAvailabe;
         }
@@ -156,7 +156,7 @@ namespace MyCourse.Models.Services.Application
         {
             try
             {
-                DataSet dataSet = await db.QueryAsync($"UPDATE Courses SET Title={model.Title}, Description={model.Description}, Email={model.Email}, FullPrice_Amount{model.FullPrice.Amount}, FullPrice_Currency={model.FullPrice.Currency}, CurrentPrice_Amount={model.CurrentPrice.Amount}, CurrentPrice_Currency={model.CurrentPrice.Currency} WHERE Id={model.Id};");
+                DataSet dataSet = await db.QueryAsync($"UPDATE Courses SET Title='{model.Title}', Description='{model.Description}', ImagePath='/logo.svg', Email='{model.Email}', FullPrice_Amount={model.FullPrice.Amount}, FullPrice_Currency='{model.FullPrice.Currency}', CurrentPrice_Amount={model.CurrentPrice.Amount}, CurrentPrice_Currency='{model.CurrentPrice.Currency}' WHERE Id={model.Id};");
                 CourseDetailViewModel course = await GetCourseAsync(model.Id);
                 return course;
             }

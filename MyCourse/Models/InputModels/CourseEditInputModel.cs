@@ -27,7 +27,7 @@ namespace MyCourse.Models.InputModels
         public string Description { get; set; }
 
         [Display(Name = "Immagine rappresentativa")]
-        public string ImagePath { get; set; }
+        public string? ImagePath { get; set; }
 
         [Required(ErrorMessage = "L'email di contatto è obbligatoria"),
         EmailAddress(ErrorMessage = "Devi inserire un indirizzo email"),
