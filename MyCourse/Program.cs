@@ -3,6 +3,7 @@ using Microsoft.Extensions.Caching.Memory;
 using MyCourse.Models.Options;
 using MyCourse.Models.Services.Application;
 using MyCourse.Models.Services.Infrastructure;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,6 +43,13 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseStaticFiles(); //Middleware per recuperare i file nella cartella wwwroot (es. immagini)
+
+//var appCulture = CultureInfo.InvariantCulture;
+//app.UseRequestLocalization(new RequestLocalizationOptions
+//{
+//    DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture(appCulture),
+//    SupportedCultures = new[] { appCulture }
+//});
 
 app.UseResponseCaching();
 
