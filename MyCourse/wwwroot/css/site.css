@@ -58,3 +58,9 @@ body {
            margin-bottom: 2px;
        }
 }
+
+.video-container {
+    position: relative;
+    padding-top: 56.25%;
+    display: block;
+}
