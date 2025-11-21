@@ -18,7 +18,7 @@ namespace MyCourse.Customisations.TagHelpers
             content = sanitizer.Sanitize(content);
 
             //Reimpostiamo il contenuto del tag
-            output.Content.Reinitialize();
+            output.Content.SetHtmlContent(content);
         }
 
         private static HtmlSanitizer CreateSanitizer()

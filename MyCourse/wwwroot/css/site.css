@@ -61,6 +61,10 @@ body {
 
 .video-container {
     position: relative;
-    padding-top: 56.25%;
     display: block;
+
+    * {
+        width: 70%;
+        margin: 0 auto;
+      }
 }
