@@ -12,6 +12,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<ICourseService, AdoNetCourseService>();
 builder.Services.AddTransient<ICachedCourseService, MemoryCachedCourseService>();
 builder.Services.AddTransient<IDatabaseAccessor, SQLServerDatabaseAccessor>();
+builder.Services.AddTransient<IImagePersister, InsecureImagePersister>();
 builder.Services.AddTransient<ErrorService>();
 
 builder.Services.AddResponseCaching();

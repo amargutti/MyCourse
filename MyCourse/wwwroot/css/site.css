@@ -68,3 +68,12 @@ body {
         margin: 0 auto;
       }
 }
+
+.custom-file-label::after {
+    font-family: 'Font Awesome 5 Free';
+}
+
+.preview-container {
+    padding-top: 100%;
+    position: relative;
+}
