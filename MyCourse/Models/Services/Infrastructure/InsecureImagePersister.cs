@@ -8,7 +8,7 @@ namespace MyCourse.Models.Services.Infrastructure
         public InsecureImagePersister(IWebHostEnvironment env)
         {
             this.env = env;
-        }
+        } 
 
         public async Task<string> SaveCourseImage(int courseId, IFormFile formFile)
         {

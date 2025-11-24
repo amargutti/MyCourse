@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="HtmlSanitizer" Version="9.0.886" />
+    <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.9.1" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.2" />
   </ItemGroup>
 
