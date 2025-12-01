@@ -89,6 +89,10 @@ namespace MyCourse.Controllers.Courses
                 catch (CourseTitleUnavailableException) {
                     ModelState.AddModelError(nameof(CourseDetailViewModel.Title), "Questo titolo esiste già");
                 }
+                catch(OptimisticConcurrencyException)
+                {
+                    ModelState.AddModelError("", "Spiacenti, il salvataggio non è possibile perchè il corso è stato modificato nel mentre da un altro utente");
+                }
             }
 
             ViewData["Title"] = "Modifica Corso";

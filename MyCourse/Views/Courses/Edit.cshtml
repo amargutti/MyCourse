@@ -5,6 +5,7 @@
     <div class="row my-3">
         <div class="col-md-9">
             <h1>@ViewData["Title"]</h1>
+            <input type="hidden" asp-for="RowVersion"/>
         </div>
         <div class="col-md-3">
             <button type="submit" class="btn btn-primary btn-lg">Salva</button>
@@ -52,9 +53,15 @@
             </div>
             <div class="input-group">
                 <label asp-for="ImagePath"></label>
-                <img id="preview" src="@Model.ImagePath" style="height: 60px;" class="d-block img-fluid" asp-for="@Model.ImagePath"/>
+                <div class="preview-container" style="padding-top: 0">
+                    <input type="hidden" asp-for="ImagePath">
+                    <img id="preview" src="@Model.ImagePath" asp-append-version="true" style="width: 300px">
+                </div>
                 <div class="custom-file mt-3">
-                    <input type="file" asp-for="Image" class="custom-file-input"  onchange="updatePreview(this)"/>
+                    <input type="file" class="custom-file-input" asp-for="Image" value="@Model.Image" onchange="updatePreview(this)">
+                    <label class="custom-file-label" asp-for="Image"></label>
+                    <span asp-validation-for="Image"></span>
+                    <p><small>L'immagine verrà ritagliata quadrata.</small></p>
                 </div>
             </div>
         </div>

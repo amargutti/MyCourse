@@ -43,7 +43,9 @@ namespace MyCourse.Models.InputModels
         public Money CurrentPrice { get; set; }
         
         [Display(Name = "Nuova Immagine...")]
-        public IFormFile Image { get; set; }
+        public IFormFile? Image { get; set; }
+
+        public string RowVersion { get; set; }
 
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -76,6 +78,7 @@ namespace MyCourse.Models.InputModels
                     Enum.Parse<Currency>(Convert.ToString(row["CurrentPrice_Currency"])),
                     Convert.ToDecimal(row["CurrentPrice_Amount"])
                 ),
+                RowVersion = Convert.ToString(row["RowVersion"])
             };
 
             return courseEditInputModel;

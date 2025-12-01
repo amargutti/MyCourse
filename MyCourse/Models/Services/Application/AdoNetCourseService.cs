@@ -110,14 +110,11 @@ namespace MyCourse.Models.Services.Application
 
             try
             {
-
                 FormattableString query = @$"INSERT INTO Courses (Title, Author, Description, ImagePath, Rating, FullPrice_Amount, FullPrice_Currency, CurrentPrice_Amount, CurrentPrice_Currency)
                                         VALUES ('{model.Title}', '{author}', '', '/logo.svg', 0, 0, 'EUR', 0, 'EUR');
                                         SELECT TOP 1 * FROM Courses ORDER BY Id DESC;";
 
-                DataSet dataset = await db.QueryAsync(query);
-
-                int courseId = Convert.ToInt32(dataset.Tables[0].Rows[0][nameof(CourseDetailViewModel.Id)]);
+                int courseId = await db.QueryScalarAsync<int>(query);
 
                 CourseDetailViewModel course = await GetCourseAsync(courseId);
 
@@ -131,14 +128,13 @@ namespace MyCourse.Models.Services.Application
 
         public async Task<bool> IsTitleAvailable(string title, int id)
         {
-            DataSet result = await db.QueryAsync($"SELECT COUNT (*) FROM Courses WHERE Title LIKE '{title}' AND Id<>{id};");
-            bool titleAvailabe = Convert.ToInt32(result.Tables[0].Rows[0][0]) == 0;
-            return titleAvailabe;
+            bool titleExists = await db.QueryScalarAsync<bool>($"SELECT COUNT (*) FROM Courses WHERE Title LIKE '{title}' AND Id<>{id};");
+            return !titleExists;
         }
 
         public async Task<CourseEditInputModel> GetCourseForEditAsync(int id)
         {
-            FormattableString query = $"SELECT Id, Title, Description, ImagePath, Email, FullPrice_Amount, FullPrice_Currency, CurrentPrice_Amount, CurrentPrice_Currency FROM Courses WHERE Id = {id};";
+            FormattableString query = $"SELECT Id, Title, Description, ImagePath, Email, FullPrice_Amount, FullPrice_Currency, CurrentPrice_Amount, CurrentPrice_Currency, RowVersion FROM Courses WHERE Id = {id};";
 
             DataSet dataSet = await db.QueryAsync(query);
 
@@ -157,26 +153,31 @@ namespace MyCourse.Models.Services.Application
 
         public async Task<CourseDetailViewModel> EditCourseAsync(CourseEditInputModel model)
         {
-            DataSet dataSet = await db.QueryAsync($"SELECT COUNT(*) FROM Courses WHERE Id={model.Id}");
-            if(Convert.ToInt32(dataSet.Tables[0].Rows[0][0]) == 0)
-            {
-                throw new CourseNotFoundException(model.Id);
-            }
-
             try
             {
-                dataSet = await db.QueryAsync($"UPDATE Courses SET Title='{model.Title}', Description='{model.Description}', Email='{model.Email}', FullPrice_Amount={model.FullPrice.Amount}, FullPrice_Currency='{model.FullPrice.Currency}', CurrentPrice_Amount={model.CurrentPrice.Amount}, CurrentPrice_Currency='{model.CurrentPrice.Currency}' WHERE Id={model.Id};");
+                string imagePath = null;
+                if (model.Image != null)
+                {
+                    imagePath = await imagePersister.SaveCourseImage(model.Id, model.Image);
+                }
+                int affectedRows = await db.CommandAsync($"UPDATE Courses SET ImagePath=COALESCE('{imagePath}', 'ImagePath'), Title='{model.Title}', Description='{model.Description}', Email='{model.Email}', FullPrice_Amount={model.FullPrice.Amount}, FullPrice_Currency='{model.FullPrice.Currency}', CurrentPrice_Amount={model.CurrentPrice.Amount}, CurrentPrice_Currency='{model.CurrentPrice.Currency}' WHERE Id={model.Id} AND RowVersion={model.RowVersion};");
+                if (affectedRows == 0)
+                {
+                    bool courseExists = await db.QueryScalarAsync<bool>($"SELECT COUNT * FROM Courses WHERE Id={model.Id}");
+                    if (courseExists)
+                    {
+                        throw new OptimisticConcurrencyException();
+                    } else
+                    {
+                        throw new CourseNotFoundException(model.Id);
+                    }
+                }
             }
             catch (SqlException exc) when (exc.Number == 2601)
             {
                 throw new CourseTitleUnavailableException(model.Title, exc);
             }
 
-            if (model.Image != null)
-            {
-                string imagePath = await imagePersister.SaveCourseImage(model.Id, model.Image);
-                dataSet = await db.QueryAsync($"UPDATE Courses SET ImagePath='{imagePath}' WHERE Id={model.Id}");
-            }
             CourseDetailViewModel course = await GetCourseAsync(model.Id);
             return course;
         }

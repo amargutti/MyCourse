@@ -19,9 +19,50 @@ namespace MyCourse.Models.Services.Infrastructure
             this.logger = logger;
         }
 
+        public async Task<int> CommandAsync(FormattableString command)
+        {
+            using SqlConnection conn = await GetOpenedConnection();
+            using var comm = GetCommand(command, conn);
+            //TODO...
+            int affectedRows = await comm.ExecuteNonQueryAsync();
+            return affectedRows;
+        }
+
         public async Task<DataSet> QueryAsync(FormattableString formattableQuery)
         {
-            //Creiamo dei SqliteParameter a partire dalla FormattableString
+            using SqlConnection conn = await GetOpenedConnection();
+            using var comm = GetCommand(formattableQuery, conn);
+
+            using var reader = await comm.ExecuteReaderAsync();
+            DataSet dataSet = new DataSet();
+            do
+            {
+                DataTable dt = new DataTable();
+                dataSet.Tables.Add(dt);
+                dt.Load(reader);
+            } while (!reader.IsClosed);
+            return dataSet;
+        }
+
+        public async Task<T> QueryScalarAsync<T>(FormattableString query)
+        {
+            using SqlConnection conn = await GetOpenedConnection();
+            using var comm = GetCommand(query, conn);
+            //TODO...
+            object result = await comm.ExecuteScalarAsync();
+            return (T) Convert.ChangeType(result, typeof(T));
+        }
+
+        private async Task<SqlConnection> GetOpenedConnection()
+        {
+            string connectionString = connectionStringOptions.CurrentValue.Default;
+            var conn = new SqlConnection(connectionString);
+            await conn.OpenAsync();
+            return conn;
+        }
+
+        private static SqlCommand GetCommand(FormattableString formattableQuery, SqlConnection conn)
+        {
             var queryArguments = formattableQuery.GetArguments();
             var sqliteParameters = new List<SqlParameter>();
             for (var i = 0; i < queryArguments.Length; i++)
@@ -30,32 +71,12 @@ namespace MyCourse.Models.Services.Infrastructure
                 {
                     continue;
                 }
-                var parameter = new SqlParameter(i.ToString(), queryArguments[i]);
+                var parameter = new SqlParameter(i.ToString(), queryArguments[i] ?? DBNull.Value);
                 sqliteParameters.Add(parameter);
             }
             string query = formattableQuery.ToString();
-            string connectionString = connectionStringOptions.CurrentValue.Default;
-
-            logger.LogInformation(query);
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                await conn.OpenAsync();
-                using (var comm = new SqlCommand(query, conn))
-                {
-                    using (var reader = await comm.ExecuteReaderAsync())
-                    {
-                        DataSet dataSet = new DataSet();
-                        do
-                        {
-                            DataTable dt = new DataTable();
-                            dataSet.Tables.Add(dt);
-                            dt.Load(reader);
-                        } while (!reader.IsClosed);
-                        return dataSet;
-                    }
-                }
-            }
+            var cmd = new SqlCommand(query, conn);
+            return cmd;
         }
     }
 }
