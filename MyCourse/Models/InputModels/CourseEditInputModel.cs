@@ -78,10 +78,17 @@ namespace MyCourse.Models.InputModels
                     Enum.Parse<Currency>(Convert.ToString(row["CurrentPrice_Currency"])),
                     Convert.ToDecimal(row["CurrentPrice_Amount"])
                 ),
-                RowVersion = Convert.ToString(row["RowVersion"])
             };
 
+            byte[] rv = (byte[]) row["RowVersion"];
+            string rowVersionString = CourseEditInputModel.RowVersionToHex(rv);
+            courseEditInputModel.RowVersion = rowVersionString;
             return courseEditInputModel;
+        }
+
+        public static string RowVersionToHex(byte[] rowVersion)
+        {
+            return "0x" + BitConverter.ToString(rowVersion).Replace("-", "");
         }
     }
 }
