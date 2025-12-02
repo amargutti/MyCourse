@@ -17,6 +17,8 @@ namespace MyCourse.Models.Services.Application.Lessons
 
         public Task<LessonDetailViewModel> GetLessonAsync(int lessonId)
         {
+            FormattableString query = $"";
+
             throw new NotImplementedException();
         }
     }
