@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyCourse.Models.Exceptions;
 using MyCourse.Models.InputModels;
-using MyCourse.Models.Services.Application;
+using MyCourse.Models.Services.Application.Courses;
 using MyCourse.Models.ViewModel.Courses;
 using System.Data;
 using System.Threading.Tasks;

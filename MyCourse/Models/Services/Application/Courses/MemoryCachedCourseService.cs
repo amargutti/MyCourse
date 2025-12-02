@@ -4,7 +4,7 @@ using MyCourse.Models.InputModels;
 using MyCourse.Models.Options;
 using MyCourse.Models.ViewModel.Courses;
 
-namespace MyCourse.Models.Services.Application
+namespace MyCourse.Models.Services.Application.Courses
 {
     public class MemoryCachedCourseService : ICachedCourseService
     {

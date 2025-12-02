@@ -9,7 +9,7 @@ using MyCourse.Models.ViewModel.Lessons;
 using System.Data;
 using System.Threading.Tasks;
 
-namespace MyCourse.Models.Services.Application
+namespace MyCourse.Models.Services.Application.Courses
 {
     public class AdoNetCourseService : ICourseService
     {

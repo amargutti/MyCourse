@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using MyCourse.Models.Options;
 using MyCourse.Models.Services.Application;
+using MyCourse.Models.Services.Application.Courses;
+using MyCourse.Models.Services.Application.Lessons;
 using MyCourse.Models.Services.Infrastructure;
 using System.Globalization;
 
@@ -14,6 +16,7 @@ builder.Services.AddTransient<ICachedCourseService, MemoryCachedCourseService>()
 builder.Services.AddTransient<IDatabaseAccessor, SQLServerDatabaseAccessor>();
 builder.Services.AddSingleton<IImagePersister, InsecureImagePersister>();
 builder.Services.AddTransient<ErrorService>();
+builder.Services.AddTransient<ILessonService, AdoNetLessonService>();
 
 builder.Services.AddResponseCaching();
 builder.Services.AddControllers(options =>

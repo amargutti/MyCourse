@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using MyCourse.Models;
-using MyCourse.Models.Services.Application;
+using MyCourse.Models.Services.Application.Courses;
 using MyCourse.Models.ViewModel;
 using MyCourse.Models.ViewModel.Courses;
 
