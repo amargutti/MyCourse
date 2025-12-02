@@ -1,6 +1,7 @@
 ﻿using MyCourse.Models.Services.Application.Courses;
 using MyCourse.Models.Services.Infrastructure;
 using MyCourse.Models.ViewModel.Lessons;
+using System.Data;
 
 namespace MyCourse.Models.Services.Application.Lessons
 {
@@ -15,11 +16,19 @@ namespace MyCourse.Models.Services.Application.Lessons
             this.log = log;
         }
 
-        public Task<LessonDetailViewModel> GetLessonAsync(int lessonId)
+        public async Task<LessonDetailViewModel> GetLessonAsync(int id)
         {
-            FormattableString query = $"";
+            FormattableString query = $"SELECT * FROM Lessons WHERE Id = {id}";
 
-            throw new NotImplementedException();
+            DataSet dataSet = await db.QueryAsync(query);
+            DataTable dataTable = dataSet.Tables[0];
+
+            //TODO: Add exception for lesson not found!
+
+            DataRow lessonRow = dataTable.Rows[0];
+            LessonDetailViewModel viewModel = LessonDetailViewModel.FromDataRow(lessonRow);
+
+            return viewModel;
         }
     }
 }

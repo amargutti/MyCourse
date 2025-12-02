@@ -13,10 +13,10 @@ namespace MyCourse.Controllers.Lessons
             this.lessonService = lessonService;
         }
 
-        public async Task<IActionResult> Detail (int lessonId)
+        public async Task<IActionResult> Detail (int id)
         {
-            ViewData["Title"] = $"Lezione {lessonId}";
-            LessonDetailViewModel lesson = await lessonService.GetLessonAsync(lessonId);
+            ViewData["Title"] = $"Lezione {id}";
+            LessonDetailViewModel lesson = await lessonService.GetLessonAsync(id);
             return View(lesson);
         }
     }
