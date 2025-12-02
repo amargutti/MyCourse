@@ -86,7 +86,7 @@ namespace MyCourse.Models.InputModels
             return courseEditInputModel;
         }
 
-        public static string RowVersionToHex(byte[] rowVersion)
+        private static string RowVersionToHex(byte[] rowVersion)
         {
             return "0x" + BitConverter.ToString(rowVersion).Replace("-", "");
         }
