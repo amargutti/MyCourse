@@ -36,11 +36,14 @@
         @foreach (LessonViewModel lesson in Model.Lessons)
         {
             <div class="row list-group-item d-flex">
-                <div class="col-md-9 d-flex align-items-center">
+                <div class="col-md-8 d-flex align-items-center">
                     <a href="#">@lesson.Name</a>
                 </div>
-                <div class="col-md-3 d-flex align-items-center">
+                <div class="col-md-2 d-flex align-items-center">
                     <i class="bi bi-clock me-2"></i><time>@lesson.Duration</time>
+                </div>
+                <div class="col-md-2">
+                    <a asp-action="Detail" asp-controller="Lessons" asp-route-id="@lesson.Id" class="btn btn-outline-primary">Dettagli</a>
                 </div>
             </div>
         }

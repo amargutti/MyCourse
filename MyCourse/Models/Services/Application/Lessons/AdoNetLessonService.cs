@@ -24,8 +24,13 @@ namespace MyCourse.Models.Services.Application.Lessons
             DataTable dataTable = dataSet.Tables[0];
 
             //TODO: Add exception for lesson not found!
+            if(dataTable.Rows.Count != 1)
+            {
+                throw new Exception();
+            }
 
             DataRow lessonRow = dataTable.Rows[0];
+
             LessonDetailViewModel viewModel = LessonDetailViewModel.FromDataRow(lessonRow);
 
             return viewModel;
