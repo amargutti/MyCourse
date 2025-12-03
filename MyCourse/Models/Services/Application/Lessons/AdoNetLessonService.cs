@@ -1,4 +1,5 @@
-﻿using MyCourse.Models.Services.Application.Courses;
+﻿using MyCourse.Models.InputModels;
+using MyCourse.Models.Services.Application.Courses;
 using MyCourse.Models.Services.Infrastructure;
 using MyCourse.Models.ViewModel.Lessons;
 using System.Data;
@@ -14,6 +15,21 @@ namespace MyCourse.Models.Services.Application.Lessons
         {
             this.db = db;
             this.log = log;
+        }
+
+        public async Task<LessonDetailViewModel> CreateLessonAsync(LessonCreateInputModel inputModel)
+        {
+            string title = inputModel.Title;
+            int courseId = inputModel.CourseId;
+
+            FormattableString cmd = @$"INSERT INTO Lessons (CourseId, Title) VALUES ({courseId}, '{title}');
+                                    SELECT TOP 1 * FROM Lessons ORDER BY Id DESC";
+
+            int lessonID = await db.QueryScalarAsync<int>(cmd);
+
+            LessonDetailViewModel lesson = await GetLessonAsync(lessonID);
+
+            return lesson;
         }
 
         public async Task<LessonDetailViewModel> GetLessonAsync(int id)

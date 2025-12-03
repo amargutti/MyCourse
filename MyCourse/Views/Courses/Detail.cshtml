@@ -23,14 +23,17 @@
                 <div class="mb-3">
                     <price curren-price="@Model.CurrentPrice" full-price="@Model.FullPrice"></price>
                 </div>
-                <img src="@Model.ImagePath" width="100" asp-append-version="true"/>
+                <img src="@Model.ImagePath" width="100" asp-append-version="true" />
             </aside>
         </div>
     </div>
 </section>
 
 <section>
-    <h2>Lezioni (@Model.Lessons.Count)</h2>
+    <div class="d-flex gap-2 align-items-center">
+        <h2>Lezioni (@Model.Lessons.Count)</h2>
+        <a asp-action="Create" asp-controller="Lessons" asp-route-id="@Model.Id" class="btn btn-outline-primary"><i class="bi bi-plus bi-lg"></i>Crea Nuova</a>
+    </div>
     <hr>
     <div class="list-group">
         @foreach (LessonViewModel lesson in Model.Lessons)

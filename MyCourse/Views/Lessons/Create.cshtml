@@ -1,0 +1,27 @@
+﻿@model LessonCreateInputModel
+
+<h2>Crea Nuova Lezione</h2>
+<div class="row">
+    <div class="col-md-12">
+        <div asp-validation-summary="All"></div>
+    </div>
+</div>
+<form method="post">
+    <section class="row">
+        <div class="col-md-8">
+            <input type="text" asp-for="Title" placeholder="Inserisci un titolo..." class="form-control form-control-lg" />
+            <span asp-validation-for="Title"></span>
+            <input type="hidden" asp-for="CourseId"/>
+        </div>
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-outline-primary btn-lg btn-block" asp-action="Create" asp-controller="Lessons">
+                <i class="bi bi-rocket-takeoff me-2"></i>Crea Lezione
+            </button>
+        </div>
+    </section>
+</form>
+
+@section Scripts
+{
+    <partial name="_Validation"></partial>
+}
