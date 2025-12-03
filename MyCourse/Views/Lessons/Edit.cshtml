@@ -1,0 +1,36 @@
+﻿@model LessonEditInputModel
+
+<form method="post">
+    <div class="row my-3">
+        <div class="col-md-9">
+            <h1>@ViewData["Title"]</h1>
+            @* <input type="hidden" asp-for="RowVersion" /> *@
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-primary btn-lg">Salva</button>
+            <button type="button" class="btn btn-danger btn-lg"><i class="bi bi-trash3-fill"></i></button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-9">
+            <label asp-for="Title"></label>
+            <div class="input-group">
+                <input type="text" asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title"></span>
+            </div>
+            <label asp-for="Description"></label>
+            <div class="input-group">
+                <textarea asp-for="Description" class="form-control" rows="15" data-summernote></textarea>
+                <span asp-validation-for="Description"></span>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <label asp-for="Duration"></label>
+            <div class="input-group">
+                <input type="text" asp-for="Duration" class="form-control" />
+                <span asp-validation-for="Duration"></span>
+            </div>
+        </div>
+    </div>
+</form>

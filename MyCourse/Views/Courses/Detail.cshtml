@@ -40,13 +40,15 @@
         {
             <div class="row list-group-item d-flex">
                 <div class="col-md-8 d-flex align-items-center">
-                    <a href="#">@lesson.Name</a>
+                    <a asp-action="Detail" asp-controller="Lessons" asp-route-id="@lesson.Id">@lesson.Name</a>
                 </div>
                 <div class="col-md-2 d-flex align-items-center">
                     <i class="bi bi-clock me-2"></i><time>@lesson.Duration</time>
                 </div>
                 <div class="col-md-2">
-                    <a asp-action="Detail" asp-controller="Lessons" asp-route-id="@lesson.Id" class="btn btn-outline-primary">Dettagli</a>
+                    <a asp-action="Edit" asp-controller="Lessons" asp-route-id="@lesson.Id" class="btn btn-outline-warning">
+                        <i class="bi bi-pencil"></i>
+                    </a>
                 </div>
             </div>
         }

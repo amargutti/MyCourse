@@ -32,6 +32,18 @@ namespace MyCourse.Models.Services.Application.Lessons
             return lesson;
         }
 
+        public async Task<LessonDetailViewModel> EditLessonAsync(LessonEditInputModel editModel)
+        {
+            FormattableString cmd = @$"UPDATE Lessons SET Title = '{editModel.Title}', Description = '{editModel.Description}',
+                                        Duration = '{editModel.Duration}' WHERE Id = {editModel.Id}";
+
+            int affectedRows = await db.CommandAsync(cmd);
+
+            LessonDetailViewModel editedLesson = await GetLessonAsync(editModel.Id);
+
+            return editedLesson;
+        }
+
         public async Task<LessonDetailViewModel> GetLessonAsync(int id)
         {
             FormattableString query = $"SELECT * FROM Lessons WHERE Id = {id}";
@@ -40,7 +52,7 @@ namespace MyCourse.Models.Services.Application.Lessons
             DataTable dataTable = dataSet.Tables[0];
 
             //TODO: Add exception for lesson not found!
-            if(dataTable.Rows.Count != 1)
+            if (dataTable.Rows.Count != 1)
             {
                 throw new Exception();
             }
@@ -51,5 +63,22 @@ namespace MyCourse.Models.Services.Application.Lessons
 
             return viewModel;
         }
+
+        public async Task<LessonEditInputModel> GetLessonForEditingAsync(int id)
+        {
+            FormattableString query = $"SELECT * FROM Lessons WHERE Id = {id}";
+
+            DataSet dataSet = await db.QueryAsync(query);
+            DataTable dataTable = dataSet.Tables[0];
+
+            if (dataTable.Rows.Count != 1) { throw new Exception(); }
+
+            DataRow lessonRow = dataTable.Rows[0];
+
+            LessonEditInputModel editModel = LessonEditInputModel.FromDataRow(lessonRow);
+
+            return editModel;
+        }
     }
+
 }
