@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MyCourse.Controllers.Courses;
 using MyCourse.Models.Exceptions;
 using MyCourse.Models.InputModels;
 using MyCourse.Models.Services.Application.Lessons;
@@ -36,15 +37,9 @@ namespace MyCourse.Controllers.Lessons
         {
             if (ModelState.IsValid)
             {
-                try
-                {
-                    LessonDetailViewModel lesson = await lessonService.CreateLessonAsync(inputModel);
-                    return RedirectToAction(nameof(Detail));
-                }
-                catch (Exception) //TODO: Implementare eccezione personalizzata
-                {
-                    ModelState.AddModelError(nameof(Exception), "Questo titolo esiste già");
-                }
+                LessonDetailViewModel lesson = await lessonService.CreateLessonAsync(inputModel);
+                TempData["ConfirmationMessage"] = "Ok! La lezione è stata creata, aggiungi anche gli altri dati";
+                return RedirectToAction(nameof(Edit), new { id = inputModel.Id});
             }
 
             ViewData["Title"] = "Nuova Lezioni";
@@ -64,11 +59,20 @@ namespace MyCourse.Controllers.Lessons
             if (ModelState.IsValid)
             {
                 LessonDetailViewModel editedLesson = await lessonService.EditLessonAsync(editModel);
+                TempData["ConfirmationMessage"] = "Ok, i dati della lezione sono stati inseriti correttamente! Ecco qua:";
                 return RedirectToAction(nameof(Detail), new { id = editedLesson.Id });
             }
 
             ViewData["Title"] = "Modifica Lezione";
             return View(editModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(LessonDeleteInputModel inputModel)
+        {
+            await lessonService.DeleteLessonAsync(inputModel);
+            TempData["ConfirmationMessage"] = "La lezione è stata eliminata";
+            return RedirectToAction(nameof(CoursesController.Detail), "Courses", new { id = inputModel.CourseId });
         }
     }
 }

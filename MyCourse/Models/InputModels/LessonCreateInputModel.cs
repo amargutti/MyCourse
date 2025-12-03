@@ -13,5 +13,6 @@ namespace MyCourse.Models.InputModels
             RegularExpression(@"^[\w\s\.]+$", ErrorMessage = "Formato del titolo non consentito"),
             ]
         public string Title { get; set; }
+        public int Id { get; set; }
     }
 }

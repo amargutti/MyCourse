@@ -5,10 +5,14 @@
         <div class="col-md-9">
             <h1>@ViewData["Title"]</h1>
             @* <input type="hidden" asp-for="RowVersion" /> *@
+            <input type="hidden" asp-for="CourseId"/>
         </div>
         <div class="col-md-3">
             <button type="submit" class="btn btn-primary btn-lg">Salva</button>
-            <button type="button" class="btn btn-danger btn-lg"><i class="bi bi-trash3-fill"></i></button>
+            <button type="submit" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger btn-lg"><i class="bi bi-trash3-fill"></i></button>
+        </div>
+        <div class="row">
+            <div class="col-12" asp-validation-summary="All"></div>
         </div>
     </div>
 

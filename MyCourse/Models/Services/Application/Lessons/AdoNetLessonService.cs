@@ -25,11 +25,21 @@ namespace MyCourse.Models.Services.Application.Lessons
             FormattableString cmd = @$"INSERT INTO Lessons (CourseId, Title) VALUES ({courseId}, '{title}');
                                     SELECT TOP 1 * FROM Lessons ORDER BY Id DESC";
 
+            #region Query to try
+            //TODO: Provare ad usare questa query SELECT * FROM Lessons WHERE Id = (SELECT MAX(Id) FROM Lessons);
+            #endregion
+
             int lessonID = await db.QueryScalarAsync<int>(cmd);
 
             LessonDetailViewModel lesson = await GetLessonAsync(lessonID);
 
             return lesson;
+        }
+
+        public async Task DeleteLessonAsync(LessonDeleteInputModel inputModel)
+        {
+            int affected = await db.CommandAsync($"DELETE FROM Lessons WHERE Id = {inputModel.Id}");
+
         }
 
         public async Task<LessonDetailViewModel> EditLessonAsync(LessonEditInputModel editModel)
