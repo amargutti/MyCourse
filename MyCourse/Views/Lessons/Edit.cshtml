@@ -5,12 +5,17 @@
         <div class="col-md-9">
             <h1>@ViewData["Title"]</h1>
             @* <input type="hidden" asp-for="RowVersion" /> *@
-            <input type="hidden" asp-for="CourseId"/>
+            <input type="hidden" asp-for="CourseId" />
         </div>
         <div class="col-md-3">
             <button type="submit" class="btn btn-primary btn-lg">Salva</button>
-            <button type="submit" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger btn-lg"><i class="bi bi-trash3-fill"></i></button>
+            <button type="button" class="btn btn-danger btn-lg" data-bs-toggle="modal" data-bs-target="#delete-modal">
+                <i class="bi bi-trash3-fill"></i>
+            </button>
         </div>
+
+
+
         <div class="row">
             <div class="col-12" asp-validation-summary="All"></div>
         </div>
@@ -34,6 +39,25 @@
             <div class="input-group">
                 <input type="text" asp-for="Duration" class="form-control" />
                 <span asp-validation-for="Duration"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="delete-modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="delete-modal">Conferma Eliminazione</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Stai per eliminare la lezione e tutti i suoi dati andranno persi. Sei sicuro di voler procedere?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Conferma</button>
+                </div>
             </div>
         </div>
     </div>
