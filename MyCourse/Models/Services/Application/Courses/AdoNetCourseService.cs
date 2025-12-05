@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
+using MyCourse.Models.Enums;
 using MyCourse.Models.Exceptions;
 using MyCourse.Models.InputModels;
 using MyCourse.Models.Options;
@@ -51,7 +52,7 @@ namespace MyCourse.Models.Services.Application.Courses
 
         public async Task<CourseDetailViewModel> GetCourseAsync(int id)
         {
-            FormattableString query = @$"SELECT Id, Title, ImagePath, Description, Author, Rating, CurrentPrice_Amount, CurrentPrice_Currency, FullPrice_Amount, FullPrice_Currency FROM Courses WHERE Id={Convert.ToInt32(id)};
+            FormattableString query = @$"SELECT Id, Title, ImagePath, Description, Author, Rating, CurrentPrice_Amount, CurrentPrice_Currency, FullPrice_Amount, FullPrice_Currency FROM Courses WHERE Id={Convert.ToInt32(id)} AND Status <> '{nameof(CourseStatus.Deleted)}';
                 SELECT * FROM Lessons WHERE CourseId={Convert.ToInt32(id)}";
 
             log.LogInformation("Query formed correctyl");
@@ -83,8 +84,8 @@ namespace MyCourse.Models.Services.Application.Courses
             string orderby = model.OrderBy == "CurrentPrice" ? "CurrentPrice_Amount" : model.OrderBy;
             string direction = model.Ascending ? "ASC" : "DESC";
 
-            FormattableString query = @$"SELECT Id, Title, ImagePath, Author, Rating, CurrentPrice_Amount, CurrentPrice_Currency, FullPrice_Amount, FullPrice_Currency FROM Courses WHERE Title LIKE '%{model.Search}%' ORDER BY {orderby} {direction} OFFSET {model.Offset} ROWS FETCH NEXT {model.Limit} ROWS ONLY; 
-                                        SELECT COUNT (*) FROM Courses WHERE Title LIKE '%{model.Search}%'";
+            FormattableString query = @$"SELECT Id, Title, ImagePath, Author, Rating, CurrentPrice_Amount, CurrentPrice_Currency, FullPrice_Amount, FullPrice_Currency FROM Courses WHERE Title LIKE '%{model.Search}%' AND Status <> '{nameof(CourseStatus.Deleted)}' ORDER BY {orderby} {direction} OFFSET {model.Offset} ROWS FETCH NEXT {model.Limit} ROWS ONLY; 
+                                        SELECT COUNT (*) FROM Courses WHERE Title LIKE '%{model.Search}%' AND Status <> '{nameof(CourseStatus.Deleted)}'";
             DataSet dataSet = await db.QueryAsync(query);
             DataTable dataTable = dataSet.Tables[0];
             var courseList = new List<CourseViewModel>();
@@ -167,7 +168,8 @@ namespace MyCourse.Models.Services.Application.Courses
                     if (courseExists)
                     {
                         throw new OptimisticConcurrencyException();
-                    } else
+                    }
+                    else
                     {
                         throw new CourseNotFoundException(model.Id);
                     }
@@ -180,6 +182,15 @@ namespace MyCourse.Models.Services.Application.Courses
 
             CourseDetailViewModel course = await GetCourseAsync(model.Id);
             return course;
+        }
+
+        public async Task DeleteCourseAsync(CourseDeleteInputModel model)
+        {
+            int affectedRows = await db.CommandAsync($"UPDATE Courses SET Status = '{nameof(CourseStatus.Deleted)}' WHERE Id = {model.Id} AND Status <> '{nameof(CourseStatus.Deleted)}'");
+            if (affectedRows == 0)
+            {
+                throw new CourseNotFoundException(model.Id);
+            }
         }
     }
 }

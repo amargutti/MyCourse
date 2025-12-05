@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MyCourse.Models.Exceptions;
 using MyCourse.Models.InputModels;
 using MyCourse.Models.Services.Application.Courses;
@@ -97,6 +98,14 @@ namespace MyCourse.Controllers.Courses
 
             ViewData["Title"] = "Modifica Corso";
             return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(CourseDeleteInputModel inputModel)
+        {
+            await courseService.DeleteCourseAsync(inputModel);
+            TempData["ConfirmationMessage"] = "Il corso è stato eliminato ma potrebbe continuare a comparire negli elenchi per un breve periodo, finché la cache non viene aggiornata.";
+            return RedirectToAction(nameof(Index));
         }
     }
 }
