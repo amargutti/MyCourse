@@ -1,4 +1,5 @@
-﻿using MyCourse.Models.ViewModel.Courses;
+﻿using MyCourse.Models.Services.Application.Courses;
+using MyCourse.Models.ViewModel.Courses;
 using MyCourse.Models.ViewModel.Lessons;
 
 namespace MyCourse.Models.Services.Application
